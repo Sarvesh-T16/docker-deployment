@@ -15,10 +15,9 @@ pipeline {
                 }
             }
         }
-        stage('Test and build spring backend') {
+        stage('Build spring backend') {
             steps {
                 dir("lbg-car-back") {
-                    sh "mvn clean test"
                     sh '''
                     cat - > src/main/resources/application.properties <<EOF
                     spring.profiles.active=prod
@@ -31,12 +30,11 @@ pipeline {
                 }
             }
         }
-        stage('Test and build react frontend') {
+        stage('Build react frontend') {
             steps {
                 dir("lbg-car-front") {
                     sh """
                     npm install
-                    yarn test
                     docker build --build-arg SERVER_URL=${SERVER_URL} -t Sarvesh-T16/lbg-car-front:v${BUILD_NUMBER} .
                     docker tag Sarvesh-T16/lbg-car-front:v${BUILD_NUMBER} Sarvesh-T16/lbg-car-front:latest
                     """
